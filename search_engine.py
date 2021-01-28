@@ -37,7 +37,6 @@ def doc_Preprocessing(values):
 # list =[]
 #my_texts_dictionnary = dict()
 
-"""
 def parse_TextFiles():
     with open('Data/Text_file/Text_Only_Ascii_Coll_MWI_NoSem', encoding="utf8") as file:
         my_upgraded_textfile = ET.fromstringlist(["<documents>", str(file.read()), "</documents>"])
@@ -50,7 +49,6 @@ def parse_TextFiles():
 
 # print(parse_TextFiles())
 
-"""
 
 def getText(nodelist):
     rc = []
