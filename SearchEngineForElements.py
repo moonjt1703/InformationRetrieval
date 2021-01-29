@@ -49,21 +49,26 @@ def parse_XMLFiles():
         mydoc = minidom.parse (filename)
         items = mydoc.getElementsByTagName ('bdy')
         ids = mydoc.getElementsByTagName ('id')
+        key = ids [0].firstChild.data
         for elem in items:
-            for elem in elem.childNodes:
-                if elem.nodeType==elem.TEXT_NODE:
-                    values.append (elem.nodeValue)
+            for elems in elem.childNodes:
+                if elems.nodeType==elems.TEXT_NODE:
+                    values.append (elems.nodeValue)
                     processed_value.append (doc_Preprocessing (values))
+                else :
+                    for elemss in elems.childNodes:
+                        if elemss.nodeType == elemss.TEXT_NODE:
+                            values.append (elemss.nodeValue)
+                            processed_value.append (doc_Preprocessing (values))
+
         if processed_value != []:
             for value in processed_value:
-                key = ids [0].firstChild.data
                 if value != []:
                     my_xmldict.update ({key: value})
     print (my_xmldict)
     return my_xmldict
 
 
-print (parse_XMLFiles ())
 
 
 def queryParser():
