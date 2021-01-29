@@ -52,17 +52,24 @@ def parse_TextFiles():
 
 def getText(nodelist):
     rc = []
-
     for node in nodelist:
         if node.nodeType == node.TEXT_NODE:
             rc.append(node.nodeValue)
+        else:
+            for nodes in node.childNodes:
+                if nodes.nodeType == nodes.TEXT_NODE:
+                    rc.append (nodes.nodeValue)
+                else :
+                    rc.append (getText (nodes.childNodes))
+    return ''.join (rc)
 
-    return ''.join(rc)
+
+
+
 
 def handleTok(tokenlist):
     texts = ""
     for token in tokenlist:
-
         texts += " "+getText(token.childNodes)
         #texts += " " + getText (token.childNodes)
 
@@ -72,30 +79,27 @@ def handleTok(tokenlist):
 
 def parse_XMLFiles():
     filenames = glob.glob('./Data/XML_file/coll/*.xml')
-    my_xmldict = {}
+    my_xmldict = dict()
     for filename in filenames:
         values=[]
         mydoc = minidom.parse(filename)
-        article = mydoc.getElementsByTagName('link')
+        article = mydoc.getElementsByTagName('article')
         ids = mydoc.getElementsByTagName('id')
         texts = handleTok(article)
-        processedText = doc_Preprocessing(texts)
+        processedText= doc_Preprocessing(texts)
         if processedText !=[] :
-            #for text in processedText:
-            # values.append(text)
-            values.extend(processedText)
-            if values !=[] :
-                key = ids [0].firstChild.data
-                my_xmldict.update ({key: values})
-
-
+            for processed in processedText :
+                values.append(processed)
+        if values !=[] :
+            key = ids [0].firstChild.data
+            my_xmldict.update ({key: values})
         print(my_xmldict)
 
 
     return my_xmldict
 
 
-#print(parse_XMLFiles())
+print(parse_XMLFiles())
 
 def queryParser():
     with open('Data/queries.txt') as f:
@@ -118,3 +122,10 @@ def get_doc(doc_id):
 
 def get_dict_size(dic):
     return len(dic)
+
+"""bdy = mydoc.getElementsByTagName ('bdy')
+            textsbdy = handleTok (bdy)
+            processedText.append (doc_Preprocessing (textsbdy))
+            if processedText != []:
+                for processed in processedText:
+                    values.append (processed)"""
